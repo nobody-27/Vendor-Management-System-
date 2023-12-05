@@ -3,27 +3,31 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 # Create your views here.
 
-class VenderProfile(APIView):
+class VendorProfileView(APIView):
     
-    def get(self,request):
-        """
-        List all vendors.
-        """
-        # GET /api/vendors/{vendor_id}/: Retrieve a specific vendor's details.
-        return
+    def get(self,request,vendor=None):
+        return Response({"vendor_id":"ALL" if vendor == None else vendor})
     
     def post(self,request):
-        """
-        : Create a new vendor..
-        """
         pass
 
-    def put(self,request):
+    def put(self,request,vendor):
         return
 
-    def delete(self,request):
+    def delete(self,request,vendor):
         pass
 
 
-class Purchase(APIView):
+class PurchaseOrderView(APIView):
     
+    def get(self,request,po_id=None):
+        return Response({})
+    
+    def post(self,request):
+        return Response({})
+    
+    def put(self,request,po_id):
+        return Response({})
+
+    def delete(self,request,po_id):
+        return Response({})
