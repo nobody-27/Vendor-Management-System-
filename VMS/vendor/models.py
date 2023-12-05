@@ -26,7 +26,7 @@ class PurchaseOrder(models.Model):
     vendor = models.ForeignKey(Vendor,on_delete=models.CASCADE)
     order_date = models.DateTimeField(help_text="order placed")
     delivery_date = models.DateTimeField()
-    items = models.JSONField()
+    items = models.JSONField(null=True)
     quantity = models.IntegerField()
     status = models.CharField(choices=STATUS,max_length=50,default=STATUS[0][0])
     quality_rating = models.FloatField(null=True)
@@ -34,7 +34,7 @@ class PurchaseOrder(models.Model):
     acknowledgment_date = models.DateTimeField(null=True,blank=True)
 
     def __str__(self) -> str:
-        return self.po_number
+        return str(self.order_date)
     
 
 class HistoryPerformance(models.Model):

@@ -1,6 +1,6 @@
 from typing import Any
 from django.core.management.base import BaseCommand
-from ...factories import VendorFactory
+from ...factories import VendorFactory,PurchaseOrder
 
 
 class Command(BaseCommand):
@@ -13,7 +13,8 @@ class Command(BaseCommand):
     def __generate_vendor(self,amount:int):
         for _ in range(amount):
             VendorFactory()
-        
+            PurchaseOrder()
+    
     
     def handle(self, *args, **option) -> str | None:
         amount = option.get('amount',10)
