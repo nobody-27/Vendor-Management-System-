@@ -19,14 +19,15 @@ def home():
 
     }
 
-
-@Faker.override_default_locale('en_US')
+from datetime import datetime,timedelta
+    
+    
 class PurchaseOrder(DjangoModelFactory):
+    
     vendor = SubFactory(VendorFactory)
     order_date = Faker('date_between_dates')
-    delivery_date = Faker('date_between_dates')
+    delivery_date = Faker(f'date_between_dates(date_start={datetime.utcnow()},date_end={datetime.utcnow() + timedelta(days=13)})')
     quantity = Faker('msisdn')
-    # item = Faker()
 
     class Meta:
         model = 'vendor.PurchaseOrder'
