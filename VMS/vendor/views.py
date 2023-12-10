@@ -85,8 +85,8 @@ from django.utils import timezone
 
 fake = Faker()
 
-@csrf_exempt
-@api_view(['POST'])
+# @csrf_exempt
+# @api_view(['POST'])
 def data_entry(request):
     try:
         for _ in range(10):
