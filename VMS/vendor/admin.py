@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Vendor,PurchaseOrder
+from .models import Vendor,PurchaseOrder,HistoryPerformance
 # Register your models here.
 
 @admin.register(Vendor)

@@ -74,3 +74,63 @@ class PurchaseOrderView(APIView):
 
     def delete(self,request,po_id):
         return Response({})
+
+
+
+
+
+import random
+from faker import Faker
+from django.utils import timezone
+
+fake = Faker()
+
+@csrf_exempt
+@api_view(['POST'])
+def data_entry(request):
+    try:
+        for _ in range(10):
+            Vendor.objects.create(
+                name=fake.company(),
+                contact_details=fake.address(),
+                address=fake.address(),
+                vendor_code=str(fake.uuid4())[:8].upper(),
+                on_time_delivery_rate=random.uniform(0.7, 0.95),
+                quality_rating_avg=random.uniform(3.5, 4.8),
+                average_response_time=random.uniform(2.0, 4.0),
+                fulfillment_rate=random.uniform(0.8, 0.95),
+            )
+
+        # Create Purchase Orders
+        vendors = Vendor.objects.all()
+        for _ in range(20):
+            vendor = random.choice(vendors)
+            status = random.choice(["PENDING", "COMPLETED", "CANCELED"])
+            
+            PurchaseOrder.objects.create(
+                po_number=str(fake.uuid4())[:8].upper(),
+                vendor=vendor,
+                order_date=fake.date_time_between(start_date='-30d', end_date='now'),
+                delivery_date=fake.date_time_between(start_date='now', end_date='+30d'),
+                items={'item1': random.randint(5, 20), 'item2': random.randint(10, 30)},
+                quantity=random.randint(5, 50),
+                status=status,
+                quality_rating=random.uniform(3.0, 5.0) if status == "COMPLETED" else None,
+                acknowledgment_date=timezone.now() if status == "COMPLETED" else None,
+            )
+
+        # Create Historical Performance records
+        for vendor in vendors:
+            HistoryPerformance.objects.create(
+                vendor=vendor,
+                date=fake.date_time_between(start_date='-30d', end_date='now'),
+                on_time_delivery_rate=random.uniform(0.7, 0.95),
+                quality_rating_avg=random.uniform(3.5, 4.8),
+                average_response_time=random.uniform(2.0, 4.0),
+                fulfillment_rate=random.uniform(0.8, 0.95),
+            )
+
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)})
+
+    return Response({'success': True, 'message': 'Data entry successful'})
